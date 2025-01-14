@@ -1,44 +1,49 @@
-import { Injectable } from '@nestjs/common';
-import { TaskRepository } from './task.repository';
-import { CreateTaskDto, UpdateTaskDto } from '../dto/create-task.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { Task } from './task.schema';
+import { CreateTaskDto } from '../dto/create-task.dto';
 
 @Injectable()
 export class TaskService {
-  constructor(private readonly taskRepository: TaskRepository) {}
+  constructor(@InjectModel('Task') private readonly taskModel: Model<Task>) {}
 
-  async createTask(
-    createTaskDto: CreateTaskDto,
-    userId: string,
-  ): Promise<Task> {
-    return this.taskRepository.create({ ...createTaskDto, userId });
+  async getAllTasks(): Promise<Task[]> {
+    return await this.taskModel.find().exec();
   }
 
-  async getAllTasks(
-    page: number,
-    limit: number,
-    query: string,
-  ): Promise<{ tasks: Task[]; total: number }> {
-    return this.taskRepository.findAll(page, limit, query);
+  async getTaskById(id: string): Promise<Task> {
+    const task = await this.taskModel.findById(id).exec();
+    if (!task) {
+      throw new NotFoundException(`Task with ID ${id} not found`);
+    }
+    return task;
   }
 
-  async getTasksByUser(
-    userId: string,
-    page: number,
-    limit: number,
-    query: string,
-  ): Promise<{ tasks: Task[]; total: number }> {
-    return this.taskRepository.findByUserId(userId, page, limit, query);
+  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+    const newTask = new this.taskModel(createTaskDto);
+    return await newTask.save();
   }
 
   async updateTask(
-    taskId: string,
-    updateTaskDto: UpdateTaskDto,
-  ): Promise<Task | null> {
-    return this.taskRepository.updateById(taskId, updateTaskDto);
+    id: string,
+    updateTaskDto: Partial<CreateTaskDto>,
+  ): Promise<Task> {
+    const updatedTask = await this.taskModel
+      .findByIdAndUpdate(id, updateTaskDto, {
+        new: true,
+      })
+      .exec();
+    if (!updatedTask) {
+      throw new NotFoundException(`Task with ID ${id} not found`);
+    }
+    return updatedTask;
   }
 
-  async deleteTask(taskId: string): Promise<Task | null> {
-    return this.taskRepository.deleteById(taskId);
+  async deleteTask(id: string): Promise<void> {
+    const result = await this.taskModel.findByIdAndDelete(id).exec();
+    if (!result) {
+      throw new NotFoundException(`Task with ID ${id} not found`);
+    }
   }
 }

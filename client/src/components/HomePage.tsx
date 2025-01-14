@@ -4,6 +4,10 @@ import {
   UserOutlined,
   PlusOutlined,
   SearchOutlined,
+  FormOutlined,
+  DeleteOutlined,
+  CloseOutlined,
+  MenuOutlined
 } from "@ant-design/icons";
 import {
   Avatar,
@@ -13,6 +17,7 @@ import {
   Popconfirm,
   Table,
   Typography,
+  Button,
 } from "antd";
 import { useState } from "react";
 import type { TableProps } from "antd";
@@ -22,9 +27,10 @@ import { RootState } from "../store/configureStore";
 
 interface DataType {
   key: string;
-  name: string;
-  age: number;
-  address: string;
+  task: string;
+  priority: string;
+  status: string;
+  date: string;
 }
 interface user {
   userId: string;
@@ -33,11 +39,12 @@ interface user {
   token: string;
 }
 
-const originData = Array.from({ length: 100 }).map<DataType>((_, i) => ({
+const originData = Array.from({ length: 10 }).map<DataType>((_, i) => ({
   key: i.toString(),
-  name: `Edward ${i}`,
-  age: 32,
-  address: `London Park no. ${i}`,
+  task: `task ${i}`,
+  priority: ``,
+  status: ``,
+  date: `${i}-1-2025`,
 }));
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
@@ -89,11 +96,9 @@ const HomePage = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState<DataType[]>(originData);
   const [editingKey, setEditingKey] = useState("");
-
   const isEditing = (record: DataType) => record.key === editingKey;
-
   const edit = (record: Partial<DataType> & { key: React.Key }) => {
-    form.setFieldsValue({ name: "", age: "", address: "", ...record });
+    form.setFieldsValue({ task: "", priority: "", status: "", ...record });
     setEditingKey(record.key);
   };
 
@@ -101,11 +106,14 @@ const HomePage = () => {
     setEditingKey("");
   };
 
-  const user = useSelector((state: RootState) => state.user.user); // Adjust based on your actual state structure
-  
-  // Log the user data when the component mounts
-  console.log("User data in Home page:", user);
+  const user = useSelector((state: RootState) => state.user.user);
 
+  console.log("User data in Home page:", user);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   const save = async (key: React.Key) => {
     try {
@@ -133,21 +141,27 @@ const HomePage = () => {
 
   const columns = [
     {
-      title: "name",
-      dataIndex: "name",
-      width: "25%",
+      title: "Task",
+      dataIndex: "task",
+      width: "30%",
       editable: true,
     },
     {
-      title: "age",
-      dataIndex: "age",
+      title: "Priority",
+      dataIndex: "priority",
       width: "15%",
       editable: true,
     },
     {
-      title: "address",
-      dataIndex: "address",
-      width: "40%",
+      title: "Status",
+      dataIndex: "status",
+      width: "20%",
+      editable: true,
+    },
+    {
+      title: "Due Date",
+      dataIndex: "date",
+      width: "20%",
       editable: true,
     },
     {
@@ -172,7 +186,8 @@ const HomePage = () => {
             disabled={editingKey !== ""}
             onClick={() => edit(record)}
           >
-            Edit
+          <FormOutlined className="m-2" />
+          <DeleteOutlined className="tb-bt-delete" />
           </Typography.Link>
         );
       },
@@ -199,9 +214,13 @@ const HomePage = () => {
   return (
     <div>
       {/* header---------------------------------------------------------------------------------- */}
-      <nav className="fixed top-0 left-0 right-0 z-10 flex justify-between items-center px-20 py-4 bg-white shadow-md">
+      <nav className="fixed top-0 left-0 right-0 z-10 bg-white shadow-md">
+      <div className="flex justify-between items-center px-4 py-4 md:px-20">
+        {/* Logo */}
         <div className="text-xl font-bold">TaskFlow</div>
-        <div className="flex items-center space-x-6">
+
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center space-x-6">
           <div>Dashboard</div>
           <div>Projects</div>
           <div>Calendar</div>
@@ -213,7 +232,34 @@ const HomePage = () => {
             <Avatar size={40} icon={<UserOutlined />} />
           </div>
         </div>
-      </nav>
+
+        {/* Mobile Nav */}
+        <div className="md:hidden flex items-center">
+          {/* <div className="text-lg font-bold flex-grow text-center">My Task</div> */}
+          <div>
+            <Avatar size={32} icon={<UserOutlined />} />
+          </div>
+          <button
+            onClick={toggleMobileMenu}
+            className="ml-4 text-xl focus:outline-none"
+          >
+            {isMobileMenuOpen ? <CloseOutlined /> : <MenuOutlined />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-white shadow-md">
+          <ul className="space-y-4 px-6 py-4">
+            <li className="text-lg">Dashboard</li>
+            <li className="text-lg">Projects</li>
+            <li className="text-lg">Calendar</li>
+            <li className="text-lg">Reports</li>
+          </ul>
+        </div>
+      )}
+    </nav>
       {/* container---------------------------------------------------------------------------------- */}
       <div className="bg-gray-200 w-full pt-20 pb-8">
         <div className="w-full px-20">
@@ -222,9 +268,9 @@ const HomePage = () => {
               <h2>My Tasks</h2>
               <div>Manage and track your tasks efficiently</div>
             </div>
-            <button className="bt-create bg-gray-600">
-              <PlusOutlined />
-              <div>New Task</div>
+            <button className="bt-create" >
+            {<PlusOutlined className="m-1" />}
+              New Task
             </button>
           </div>
           {/* search---------------------------------------------------------------------------------- */}
@@ -232,8 +278,8 @@ const HomePage = () => {
             <Input
               size="large"
               placeholder="Search tasks, projects, and more..."
-              prefix={<SearchOutlined />} // Adds the magnifying glass icon inside the input
-              className="w-full" // Ensures the search bar takes the full width
+              prefix={<SearchOutlined />} 
+              className="w-full" 
             />
           </div>
           {/* table---------------------------------------------------------------------------------- */}

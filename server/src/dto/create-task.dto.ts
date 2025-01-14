@@ -1,42 +1,18 @@
-import {
-  IsNotEmpty,
-  IsString,
-  IsOptional,
-  IsDateString,
-} from 'class-validator';
-import { Types } from 'mongoose';
+import { IsString, IsNotEmpty, IsEnum, IsDateString } from 'class-validator';
+
 export class CreateTaskDto {
+  @IsString()
   @IsNotEmpty()
+  task: string;
+
   @IsString()
-  title: string;
+  @IsEnum(['low', 'medium', 'high'])
+  priority: 'low' | 'medium' | 'high';
 
-  @IsNotEmpty()
-  @IsDateString() // Đảm bảo giá trị là định dạng ngày hợp lệ
-  createDate: string; // Thay đổi từ 'description' thành 'createDate'
-
-  @IsOptional()
   @IsString()
-  status?: string;
+  @IsEnum(['pending', 'in-progress', 'completed'])
+  status: 'pending' | 'in-progress' | 'completed';
 
-  @IsNotEmpty()
-  @IsString()
-  userId: string; // Khóa ngoại liên kết với User
-}
-
-export class UpdateTaskDto {
-  @IsOptional()
-  @IsString()
-  title?: string;
-
-  @IsOptional()
-  @IsDateString() // Đảm bảo giá trị là định dạng ngày hợp lệ
-  createDate?: string; // Thay đổi từ 'description' thành 'createDate'
-
-  @IsOptional()
-  @IsString()
-  status?: string;
-
-  @IsOptional()
-  @IsString()
-  userId?: Types.ObjectId;
+  @IsDateString()
+  date: string;
 }

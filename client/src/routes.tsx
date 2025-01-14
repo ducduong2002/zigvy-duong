@@ -6,8 +6,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import HomePage from "./components/HomePage";
-// import Login from "./testttttttttttt/logintest";
-// import Home from "./testttttttttttt/hometest";
 const router = createBrowserRouter([
   {
     path: "/login",
