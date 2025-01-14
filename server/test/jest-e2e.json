@@ -1,0 +1,17 @@
+{
+  "preset": "@nestjs/testing",
+  "testEnvironment": "node",
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "./",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "collectCoverageFrom": ["**/*.{js,ts}"],
+  "coverageDirectory": "./coverage",
+  "coverageProvider": "v8",
+  "setupFiles": ["dotenv/config"],
+  "globalSetup": "jest-environment-node",
+  "testTimeout": 30000,
+  "maxWorkers": 1
+}
