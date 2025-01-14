@@ -14,12 +14,15 @@ export interface Login {
 
 }
 
-export interface User extends Omit<Register, "password"> {
-  _id: string;
+export  interface User {
+  userId: string;
+  name: string;
+  email: string;
+  token: string;
 }
 
 export interface UserId extends Omit<User, "email" | "password" | "_id"> {
-  _id: string;
+  userId: string;
 }
 
 export interface ApiResponse {
@@ -31,3 +34,18 @@ export interface ApiResponse {
   token: string;
 }
 
+export interface DataTypeTask {
+  key: string;
+  task: string;
+  priority: string;
+  status: string;
+  date: string;
+}
+export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
+  editing: boolean;
+  dataIndex: string;
+  title: any;
+  inputType: "number" | "text";
+  record: DataTypeTask;
+  index: number;
+}

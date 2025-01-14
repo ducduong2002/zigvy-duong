@@ -14,12 +14,12 @@
   margin-top: 24px;
 }
 .bt-create {
-  background: #4f46e5;
-  display: flex;
-  align-items: center;
-  color: #fff;
-  border-radius: 8px; 
-  padding: 8px 16px; 
+  background: #4f46e5 !important; 
+  display: flex !important;
+  align-items: center !important;
+  color: #fff !important;
+  border-radius: 8px !important; 
+  padding: 8px 16px !important; 
 }
 .tb-bt-delete{
     margin: 8px;
