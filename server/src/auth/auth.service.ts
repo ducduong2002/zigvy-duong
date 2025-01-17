@@ -27,13 +27,16 @@ export class AuthService {
       userId,
     });
   }
-  async login(login: LoginDto): Promise<{ email: string; _id: unknown }> {
+  async login(
+    login: LoginDto,
+  ): Promise<{ email: string; _id: unknown; token: string }> {
     const { email, password } = login;
     const user = await this.authRepository.findByEmail(email);
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new Error('Invalid credential   ');
     }
-    // const token = this.jwtService.sign({ id: user._id, email: user.email });
-    return { email: user.email, _id: user._id }; // Return the token as an object
+    const token = this.jwtService.sign({ id: user._id, email: user.email });
+
+    return { email: user.email, _id: user._id, token };
   }
 }

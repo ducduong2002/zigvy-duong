@@ -1,20 +1,24 @@
-import { Schema, Document } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
-export const TaskSchema = new Schema({
-  task: { type: String, required: true },
-  priority: { type: String, enum: ['low', 'medium', 'high'], required: true },
-  status: {
-    type: String,
-    enum: ['pending', 'in-progress', 'completed'],
-    required: true,
-  },
-  date: { type: Date, default: Date.now },
-});
+export type TaskDocument = Task & Document;
 
-export interface Task extends Document {
-  id: string;
+@Schema()
+export class Task {
+  @Prop({ required: true })
   task: string;
-  priority: 'low' | 'medium' | 'high';
-  status: 'pending' | 'in-progress' | 'completed';
+
+  @Prop({ required: true })
+  status: string;
+
+  @Prop({ required: true })
   date: Date;
+
+  @Prop({ required: true })
+  priority: string;
+
+  @Prop({ required: true })
+  userId: string;
 }
+
+export const TaskSchema = SchemaFactory.createForClass(Task);

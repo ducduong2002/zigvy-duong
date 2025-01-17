@@ -1,49 +1,29 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Task } from './task.schema';
-import { CreateTaskDto } from '../dto/create-task.dto';
+import { Task, TaskDocument } from './task.schema';
 
 @Injectable()
 export class TaskService {
-  constructor(@InjectModel('Task') private readonly taskModel: Model<Task>) {}
+  constructor(@InjectModel(Task.name) private taskModel: Model<TaskDocument>) {}
 
-  async getAllTasks(): Promise<Task[]> {
-    return await this.taskModel.find().exec();
+  async createTask(task: Task): Promise<Task> {
+    const newTask = new this.taskModel(task);
+    return newTask.save();
   }
 
-  async getTaskById(id: string): Promise<Task> {
-    const task = await this.taskModel.findById(id).exec();
-    if (!task) {
-      throw new NotFoundException(`Task with ID ${id} not found`);
-    }
-    return task;
+  async findTasksByUserId(userId: string): Promise<Task[]> {
+    return this.taskModel.find({ userId }).exec();
   }
 
-  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-    const newTask = new this.taskModel(createTaskDto);
-    return await newTask.save();
-  }
-
-  async updateTask(
-    id: string,
-    updateTaskDto: Partial<CreateTaskDto>,
+  async updateTaskByUserId(
+    _id: string,
+    taskData: Partial<Task>,
   ): Promise<Task> {
-    const updatedTask = await this.taskModel
-      .findByIdAndUpdate(id, updateTaskDto, {
-        new: true,
-      })
-      .exec();
-    if (!updatedTask) {
-      throw new NotFoundException(`Task with ID ${id} not found`);
-    }
-    return updatedTask;
+    return this.taskModel.findOneAndUpdate({ _id }, taskData, { new: true });
   }
 
-  async deleteTask(id: string): Promise<void> {
-    const result = await this.taskModel.findByIdAndDelete(id).exec();
-    if (!result) {
-      throw new NotFoundException(`Task with ID ${id} not found`);
-    }
+  async deleteTaskByUserId(_id: string): Promise<{ deletedCount?: number }> {
+    return this.taskModel.deleteOne({ _id }).exec();
   }
 }

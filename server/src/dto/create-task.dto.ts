@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, IsEnum, IsDateString } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsEnum,
+  IsDateString,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateTaskDto {
   @IsString()
@@ -15,4 +21,8 @@ export class CreateTaskDto {
 
   @IsDateString()
   date: string;
+
+  @IsOptional()
+  @IsString()
+  _id?: string;
 }

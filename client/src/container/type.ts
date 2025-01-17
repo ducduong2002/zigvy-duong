@@ -2,15 +2,11 @@ export interface Register {
   email: string;
   password: string;
   name: string;
-  _id: string;
-
 }
 
 export interface Login {
   email: string;
   password: string;
-  name: string;
-  _id: string;
 
 }
 
@@ -19,6 +15,7 @@ export  interface User {
   name: string;
   email: string;
   token: string;
+  _id: string
 }
 
 export interface UserId extends Omit<User, "email" | "password" | "_id"> {
@@ -34,18 +31,20 @@ export interface ApiResponse {
   token: string;
 }
 
-export interface DataTypeTask {
-  key: string;
+export interface Task  {
+  userId: string;
   task: string;
-  priority: string;
-  status: string;
+  priority: "High" | "Medium" | "Low";
+  status: "Pending" | "In Progress" | "Completed";
   date: string;
+  _id?: string;
 }
+
 export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
   dataIndex: string;
   title: any;
   inputType: "number" | "text";
-  record: DataTypeTask;
+  record: Task;
   index: number;
 }
