@@ -1,19 +1,24 @@
 import React from "react";
-import Login from "./components/Login";
+import Login from "./page/Login";
 import {
   createBrowserRouter,
   RouterProvider,
   Navigate,
 } from "react-router-dom";
-import HomePage from "./components/HomePage";
+import TaskPage from "./page/TaskPage";
+// import ProjectPage from "./page/ProjectPage";
 const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
   },
   {
-    path: "/home",
-    element: <HomePage />,
+    path: "/task",
+    element: <TaskPage />,
+  },
+  {
+    path: "/project",
+    // element: <ProjectPage />,
   },
   {
     path: "/*",

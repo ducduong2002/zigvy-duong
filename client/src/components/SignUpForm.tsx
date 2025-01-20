@@ -1,31 +1,40 @@
 import "../assets/preview/stylesheets/css/Login.css";
-import { Button, Form, Input } from "antd";
+import { Button, Form } from "antd";
 import { Register } from "../container/type";
 import { useState } from "react";
+import ButtonCustom from "./ButtonCustom";
+import InputCustom from "./InputCustom"; // Import InputCustom component
 
 interface SignUpFormProps {
   onFinish: (values: Register) => void;
 }
 
 const SignUpForm: React.FC<SignUpFormProps> = ({ onFinish }) => {
-  const [passwordStrength, setPasswordStrength] = useState<"Weak" | "Medium" | "Strong" | "">("");
+  const [passwordStrength, setPasswordStrength] = useState<
+    "Weak" | "Medium" | "Strong" | ""
+  >("");
   const [emailError, setEmailError] = useState<string | null>(null);
 
-  const checkPasswordStrength = (password: string): "Weak" | "Medium" | "Strong" | "" => {
+  const checkPasswordStrength = (
+    password: string
+  ): "Weak" | "Medium" | "Strong" | "" => {
     if (!password) return "";
-    if (password.length < 6) return "Weak"; 
-    if (/[A-Z]/.test(password) && /[a-z]/.test(password) && /\d/.test(password) && /[@$!%*?&#]/.test(password)) {
-      return "Strong"; 
+    if (password.length < 6) return "Weak";
+    if (
+      /[A-Z]/.test(password) &&
+      /[a-z]/.test(password) &&
+      /\d/.test(password) &&
+      /[@$!%*?&#]/.test(password)
+    ) {
+      return "Strong";
     }
-    return "Medium"; 
+    return "Medium";
   };
-
 
   const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
-
 
   return (
     <>
@@ -43,7 +52,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onFinish }) => {
           name="name"
           rules={[{ required: true, message: "Please input your Name!" }]}
         >
-          <Input placeholder="Full Name" />
+          <InputCustom  placeholder="Full Name" required />
         </Form.Item>
 
         <Form.Item
@@ -58,7 +67,11 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onFinish }) => {
             },
           ]}
         >
-          <Input placeholder="Email" />
+          <InputCustom
+            placeholder="Email"
+            type="email"
+            required
+          />
         </Form.Item>
 
         <Form.Item
@@ -70,7 +83,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onFinish }) => {
                 const strength = checkPasswordStrength(value);
                 if (strength === "Weak") {
                   return Promise.reject(
-                    new Error("Password is too weak! Include uppercase, numbers, and special characters.")
+                    new Error(
+                      "Password is too weak! Include uppercase, numbers, and special characters."
+                    )
                   );
                 }
                 return Promise.resolve();
@@ -78,13 +93,21 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onFinish }) => {
             },
           ]}
         >
-          <Input.Password placeholder="Password" />
+          <InputCustom
+            placeholder="Password"
+            type="password"
+            required
+          />
         </Form.Item>
         {passwordStrength && (
           <div
             style={{
-              marginBottom: "16px",
-              color: passwordStrength === "Strong" ? "green" : passwordStrength === "Medium" ? "orange" : "red",
+              color:
+                passwordStrength === "Strong"
+                  ? "green"
+                  : passwordStrength === "Medium"
+                  ? "orange"
+                  : "red",
             }}
           >
             Password Strength: {passwordStrength}
@@ -106,13 +129,20 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onFinish }) => {
             }),
           ]}
         >
-          <Input.Password placeholder="Confirm Password" />
+          <InputCustom
+            placeholder="Confirm Password"
+            type="password"
+            required
+          />
         </Form.Item>
 
         <Form.Item>
-          <Button block type="primary" htmlType="submit">
-            Sign Up
-          </Button>
+          <ButtonCustom
+            text="Register"
+            htmlType="submit"
+            block
+            className="rounded-lg bg-\"
+          />
         </Form.Item>
       </Form>
     </>

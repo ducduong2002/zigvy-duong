@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Radio } from "antd";
 import { useDispatch } from "react-redux";
 import { loginRequest, signUpRequest } from "../store/login/userSlice";
-import SignInForm from "./SignInForm";
-import SignUpForm from "./SignUpForm";
+import SignInForm from"../components/SignInForm";
+import SignUpForm from "../components/SignUpForm";
 import { AppDispatch } from "../store/configureStore";
 import { Login, Register } from "@/container/type";
-import Toast from "./Toast";
+import Toast from "../components/Toast";
 
 const LoginPage: React.FC = () => {
   const [position, setPosition] = useState<"Sign In" | "Sign Up">("Sign In");

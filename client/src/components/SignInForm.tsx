@@ -1,14 +1,12 @@
 import "../assets/preview/stylesheets/css/Login.css";
-import { Button, Checkbox, Form, Input, Row, Col } from "antd";
-import {
-  GoogleOutlined,
-  AppleOutlined,
-  FacebookOutlined,
-} from "@ant-design/icons";
-import { Login } from "@/container/type";
+import { Checkbox, Form, Input } from "antd";
 import { useState } from "react";
-import { LoadingOutlined } from "@ant-design/icons"; // Import the icon
-
+import GoogleButton from "./GoogleButton";
+import FacebookButton from "./FaceBookButton";
+import IPButton from "./iPButton";
+import ButtonCustom from "./ButtonCustom";
+import InputCustom from "./InputCustom";
+import { Login } from "@/container/type";
 interface SignInFormProps {
   onFinish: (values: Login) => Promise<void>;
 }
@@ -18,11 +16,14 @@ const SignInForm: React.FC<SignInFormProps> = ({ onFinish }) => {
 
   const handleFinish = async (values: Login) => {
     setLoading(true);
-    await onFinish(values); // Call the onFinish function passed via props
-    // Simulate a delay of 5 seconds before stopping the loading spinner
+    await onFinish(values);
     setTimeout(() => {
       setLoading(false);
-    }, 5000); // 5 seconds delay
+    }, 5000);
+  };
+
+  const handleButtonClick = (buttonLabel: string) => {
+    console.log(`Button ${buttonLabel} clicked`);
   };
 
   return (
@@ -35,19 +36,26 @@ const SignInForm: React.FC<SignInFormProps> = ({ onFinish }) => {
         initialValues={{ remember: true }}
         onFinish={handleFinish}
       >
-        <label>Email</label>
+        <label className="block text-lg">Email Address</label>
         <Form.Item
           name="email"
           rules={[{ required: true, message: "Please input your Email!" }]}
         >
-          <Input placeholder="name@company.com" />
+          <InputCustom
+            placeholder="name@company.com"
+            type="email"
+            required
+          />
         </Form.Item>
-        <label>Password</label>
+        <label className="block text-lg">Password</label>
         <Form.Item
           name="password"
           rules={[{ required: true, message: "Please input your Password!" }]}
         >
-          <Input.Password placeholder="••••••••" />
+          <InputCustom 
+            placeholder="Password" 
+            type="password" 
+            required />
         </Form.Item>
 
         <Form.Item>
@@ -58,45 +66,23 @@ const SignInForm: React.FC<SignInFormProps> = ({ onFinish }) => {
         </Form.Item>
 
         <Form.Item>
-          <Button
-            block
-            type="primary"
+          <ButtonCustom
+            text="Log in"
+            loading={loading}
             htmlType="submit"
-            loading={loading} // Optional, but can still be kept if you want to show default loading spinner as well
-            icon={loading ? <LoadingOutlined /> : null} // Display loading icon when loading
-          >
-            {!loading ? "Log in" : null}{" "}
-            {/* Show "Log in" text only when not loading */}
-          </Button>
+            block
+            className="rounded-lg"
+          />
         </Form.Item>
-
-        <div className="line-container mb-4">
+        <div className="my-4 text-center">
           <span>Or continue with</span>
         </div>
 
-        <Row justify="center" gutter={16}>
-          <Col span={8}>
-            <Button
-              icon={<GoogleOutlined />}
-              size="large"
-              style={{ width: "100%" }}
-            />
-          </Col>
-          <Col span={8}>
-            <Button
-              icon={<AppleOutlined />}
-              size="large"
-              style={{ width: "100%" }}
-            />
-          </Col>
-          <Col span={8}>
-            <Button
-              icon={<FacebookOutlined />}
-              size="large"
-              style={{ width: "100%" }}
-            />
-          </Col>
-        </Row>
+        <div className="flex flex-row justify-center">
+          <GoogleButton onClick={() => handleButtonClick("Google")} />
+          <IPButton onClick={() => handleButtonClick("IP")} />
+          <FacebookButton onClick={() => handleButtonClick("Facebook")} />
+        </div>
       </Form>
     </>
   );
