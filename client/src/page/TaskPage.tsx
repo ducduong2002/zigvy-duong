@@ -10,8 +10,9 @@ import {
   setLimit,
   setKeyword,
   resetTasks,
-  setStatus,
+  setFilterStatus,
   setPriority,
+  setFilterPriority,
 } from "../store/task/taskSlice";
 import { AppDispatch } from "../store/configureStore";
 import AntDTable from "../components/Table";
@@ -79,18 +80,17 @@ const EditableCell = ({
   );
 };
 
-const TaskPage = () =>  {
-  <Skeleton avatar paragraph={{ rows: 4 }} />;
+const TaskPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const {
     tasks,
+    status,
     page,
     limit,
     totalTasks,
     totalPages,
     keyword,
-    status,
     priority,
   } = useSelector((state: RootState) => state.tasks);
 
@@ -102,7 +102,7 @@ const TaskPage = () =>  {
     if (userInfo && userInfo._id) {
       dispatch(fetchTaskByUserId(userInfo._id));
     }
-  }, [dispatch, userInfo, page, limit, keyword, status]);
+  }, [dispatch, priority, status, userInfo, page, limit, keyword]);
 
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
@@ -252,12 +252,13 @@ const TaskPage = () =>  {
     dispatch(setPage(1));
   };
 
-  const statusOptions = ["completed", "in-progress", "pending"];
-  const priorityOptions = ["low", "medium", "high"];
-
   const handleStatusChange = (value: string) => {
-    dispatch(setStatus(value));
     dispatch(setPage(1));
+    dispatch(setFilterStatus(value));
+  };
+  const handlePriorityChange = (value: string) => {
+    dispatch(setPage(1));
+    dispatch(setFilterPriority(value));
   };
 
   return (
@@ -286,7 +287,48 @@ const TaskPage = () =>  {
               handleSearch={handleSearch}
               resetData={resetData}
             />
+
+            <div className="flex">
+              <div>
+                <Select
+                  value={status}
+                  placeholder="filter Status"
+                  onChange={handleStatusChange}
+                  style={{
+                    width: 120,
+                    marginBottom: 5,
+                    marginRight: 16,
+                    marginTop: 5,
+                  }}
+                  allowClear
+                >
+                  <Option value="Pending">Pending</Option>
+                  <Option value="Completed">Completed</Option>
+                  <Option value="In Progress">In Progress</Option>
+                </Select>
+              </div>
+              <div>
+                <Select
+                  value={priority}
+                  placeholder="filter priority"
+                  onChange={handlePriorityChange}
+                  style={{
+                    width: 120,
+                    marginBottom: 5,
+                    marginRight: 16,
+                    marginTop: 5,
+                  }}
+                  allowClear
+                >
+                  <Option value="Low">Low</Option>
+                  <Option value="Medium">Medium</Option>
+                  <Option value="High">High</Option>
+                </Select>
+              </div>
+            </div>
           </div>
+
+          {/**/}
 
           {/* Task Table */}
           <div className="overflow-x-auto bg-white rounded-lg shadow-md mt-3">
