@@ -1,17 +1,18 @@
 import React, { useState } from "react";
-import { Form, Input, Modal, Select, Button } from "antd";
+import { Form, Modal, Select, } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import "../assets/preview/stylesheets/css/Homepage.css";
 import { AppDispatch } from "../store/configureStore";
 import { useDispatch } from "react-redux";
 import { addTask } from "../store/task/taskSlice";
+import InputCustom from "./Input"
+import ButtonCustom from "./Button";
 import Toast from "./Toast";
 
 interface TaskIdProp {
   userId: string;
 }
 
-const ModelCreateTask: React.FC<TaskIdProp> = ({ userId }) => {
+const ModelTask: React.FC<TaskIdProp> = ({ userId }) => {
   const { Option } = Select;
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -36,17 +37,17 @@ const ModelCreateTask: React.FC<TaskIdProp> = ({ userId }) => {
 
   const handleAddTask = async () => {
     try {
-      const values = await form.validateFields(); 
+      const values = await form.validateFields();
       const newTask = {
         ...values,
-        userId: userId || "default_user_id", //userId of user passed to userId task
+        userId: userId || "default_user_id",
         date: new Date().toISOString(),
       };
 
       await dispatch(addTask(newTask)).unwrap();
       showToast("Create new task successfully...", "success");
       setIsModalVisible(false);
-      form.resetFields(); 
+      form.resetFields();
     } catch (error: any) {
       if (error.name === "Error") {
         showToast("Please fill in all fields.", "error");
@@ -58,15 +59,17 @@ const ModelCreateTask: React.FC<TaskIdProp> = ({ userId }) => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    form.resetFields(); 
+    form.resetFields();
   };
 
   return (
     <div>
-      <Button className="bt-create" onClick={showModal}>
-        <PlusOutlined className="m-1" />
-        New Task
-      </Button>
+       <ButtonCustom
+        className="bg-blue-700 text-white flex rounded-lg"
+        onClick={showModal}
+        text="New Task"
+        icon={< PlusOutlined className="mt-1"/>}
+      />
       <Modal
         title="Add New Task"
         visible={isModalVisible}
@@ -88,7 +91,8 @@ const ModelCreateTask: React.FC<TaskIdProp> = ({ userId }) => {
             name="task"
             rules={[{ required: true, message: "Please input the task!" }]}
           >
-            <Input placeholder="Enter your task" />
+            <InputCustom placeholder="Enter your task" required />
+    
           </Form.Item>
           <Form.Item
             label="Priority"
@@ -114,6 +118,7 @@ const ModelCreateTask: React.FC<TaskIdProp> = ({ userId }) => {
           </Form.Item>
         </Form>
       </Modal>
+
       <Toast
         message={toast.message}
         type={toast.type as "success" | "error"}
@@ -123,4 +128,4 @@ const ModelCreateTask: React.FC<TaskIdProp> = ({ userId }) => {
   );
 };
 
-export default ModelCreateTask;
+export default ModelTask;

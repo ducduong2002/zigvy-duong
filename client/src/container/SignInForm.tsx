@@ -1,11 +1,11 @@
-import "../assets/preview/stylesheets/css/Login.css";
+
 import { Checkbox, Form, Input } from "antd";
 import { useState } from "react";
-import GoogleButton from "./GoogleButton";
-import FacebookButton from "./FaceBookButton";
-import IPButton from "./iPButton";
-import ButtonCustom from "./ButtonCustom";
-import InputCustom from "./InputCustom";
+import GoogleButton from "../components/GoogleButton";
+import FacebookButton from "../components/FaceBookButton";
+import IPButton from "../components/iPButton";
+import ButtonCustom from "../components/Button";
+import InputCustom from "../components/Input";
 import { Login } from "@/container/type";
 interface SignInFormProps {
   onFinish: (values: Login) => Promise<void>;

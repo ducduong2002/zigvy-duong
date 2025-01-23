@@ -1,7 +1,7 @@
 import React from "react";
-import { Input } from "antd";
+import { Input as AntdInput} from "antd";
 
-interface InputCustomProps {
+interface InputProps {
   label?: string;
   placeholder: string;
   value?: string;
@@ -9,10 +9,10 @@ interface InputCustomProps {
   type?: "text" | "password" | "email" | "number" | "name";
   required?: boolean;
   className?: string;
-  rules?: any;
+  name?: string;
 }
 
-const InputCustom: React.FC<InputCustomProps> = ({
+const Input: React.FC<InputProps> = ({
   label,
   placeholder,
   value,
@@ -25,7 +25,7 @@ const InputCustom: React.FC<InputCustomProps> = ({
     <div className="input-custom-container">
       <label className="block text-lg">{label}</label>
       {type === "password" ? (
-        <Input.Password
+        <AntdInput.Password
           value={value}
           onChange={onChange}
           placeholder={placeholder}
@@ -33,7 +33,7 @@ const InputCustom: React.FC<InputCustomProps> = ({
           className={`border p-2 rounded-md ${className}`}
         />
       ) : (
-        <Input
+        <AntdInput
           type={type}
           value={value}
           onChange={onChange}
@@ -46,4 +46,4 @@ const InputCustom: React.FC<InputCustomProps> = ({
   );
 };
 
-export default InputCustom;
+export default Input;

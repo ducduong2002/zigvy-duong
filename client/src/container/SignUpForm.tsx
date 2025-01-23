@@ -1,9 +1,8 @@
-import "../assets/preview/stylesheets/css/Login.css";
-import { Button, Form } from "antd";
-import { Register } from "../container/type";
+import { Form } from "antd";
+import { Register } from "./type";
 import { useState } from "react";
-import ButtonCustom from "./ButtonCustom";
-import InputCustom from "./InputCustom"; // Import InputCustom component
+import ButtonCustom from "../components/Button";
+import InputCustom from "../components/Input";
 
 interface SignUpFormProps {
   onFinish: (values: Register) => void;

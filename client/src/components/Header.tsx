@@ -1,5 +1,4 @@
-import "../assets/preview/stylesheets/css/Homepage.css";
-import "../assets/preview/stylesheets/css/Header.css";
+
 import { AppDispatch } from "../store/configureStore";
 import {
   BellOutlined,
@@ -12,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "../store/login/userSlice";
-
+import { Link } from "react-router-dom";
 const Header = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -42,16 +41,33 @@ const Header = () => {
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-6">
             <div>Dashboard</div>
-            <div>Projects</div>
+
+            <div className="hover:text-gray-500 hover:scale-125 transition-all ">
+              <Link className="text-inherit no-underline" to="/task">
+                Task
+              </Link>
+            </div>
+
+            <div className="hover:text-gray-500 hover:scale-125 transition-all">
+              <Link className="text-inherit no-underline" to="/project">
+                Projects
+              </Link>
+            </div>
+
             <div>Calendar</div>
             <div>Reports</div>
-            <div className="mb-1">
+
+            <div className="">
               <BellOutlined />
             </div>
+
             {/* logout */}
-            <Button type="text" className="ml-1">
-              <IconFont className="custom-icon" type="icon-tuichu" onClick={handleLogout} />
-            </Button>
+
+            <IconFont
+              className="text-2xl"
+              type="icon-tuichu"
+              onClick={handleLogout}
+            />
           </div>
 
           {/* Mobile Nav */}
@@ -63,7 +79,11 @@ const Header = () => {
               {isMobileMenuOpen ? <CloseOutlined /> : <MenuOutlined />}
             </button>
             <Button type="text" className="ml-2">
-              <IconFont className="custom-icon" type="icon-tuichu" onClick={handleLogout}/>
+              <IconFont
+                className="custom-icon"
+                type="icon-tuichu"
+                onClick={handleLogout}
+              />
             </Button>
           </div>
         </div>
@@ -73,7 +93,18 @@ const Header = () => {
           <div className="md:hidden bg-white shadow-md">
             <ul className="space-y-4 px-6 py-4">
               <li className="text-lg">Dashboard</li>
-              <li className="text-lg">Projects</li>
+
+              <li className="hover:text-gray-500 hover:scale-125 transition-all ">
+                <Link className="text-inherit no-underline" to="/task">
+                  Task
+                </Link>
+              </li>
+
+              <li className="hover:text-gray-500 hover:scale-125 transition-all">
+                <Link className="text-inherit no-underline" to="/project">
+                  Projects
+                </Link>
+              </li>
               <li className="text-lg">Calendar</li>
               <li className="text-lg">Reports</li>
             </ul>

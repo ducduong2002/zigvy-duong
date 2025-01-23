@@ -6,7 +6,7 @@ import { AuthRepository } from './auth.repository';
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from 'src/user/user.schema';
-import { LoginDto, SignupDto } from 'src/dto/auth.dto';
+import { LoginDto, SignupDto } from 'src/auth/auth.dto';
 @Injectable()
 export class AuthService {
   constructor(

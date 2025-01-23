@@ -17,7 +17,8 @@ const persistConfig = {
   storage,
   whitelist: [
     "user", 
-    "tasks"
+    "tasks",
+    "projects"
   ],
 };
 

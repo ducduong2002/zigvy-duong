@@ -8,13 +8,13 @@ export class Task {
   @Prop({ required: true })
   task: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, enum: ['Pending', 'In Progress', 'Completed'] }) // Giá trị cho status
   status: string;
 
   @Prop({ required: true })
   date: Date;
 
-  @Prop({ required: true })
+  @Prop({ required: true, enum: ['Low', 'Medium', 'High'] }) // Giá trị cho priority
   priority: string;
 
   @Prop({ required: true })

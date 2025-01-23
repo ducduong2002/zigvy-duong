@@ -1,8 +1,8 @@
 import React from "react";
-import { Button } from "antd";
+import { Button as AntdButton} from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
-interface ButtonCustomProps {
+interface ButtonProps {
   text: string;
   loading?: boolean; 
   onClick?: () => void; 
@@ -12,7 +12,7 @@ interface ButtonCustomProps {
   htmlType?: "button" | "submit" | "reset"; 
 }
 
-const ButtonCustom: React.FC<ButtonCustomProps> = ({
+const Button: React.FC<ButtonProps> = ({
   text,
   loading = false,
   onClick,
@@ -22,9 +22,8 @@ const ButtonCustom: React.FC<ButtonCustomProps> = ({
   htmlType = "button",
 }) => {
   return (
-    <Button
+    <AntdButton
       block={block}
-      type="primary"
       htmlType={htmlType}
       loading={loading}
       icon={loading ? <LoadingOutlined /> : icon}
@@ -32,8 +31,8 @@ const ButtonCustom: React.FC<ButtonCustomProps> = ({
       onClick={onClick}
     >
       {!loading ? text : null}
-    </Button>
+    </AntdButton>
   );
 };
 
-export default ButtonCustom;
+export default Button;

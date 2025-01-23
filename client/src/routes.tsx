@@ -6,19 +6,29 @@ import {
   Navigate,
 } from "react-router-dom";
 import TaskPage from "./page/TaskPage";
-// import ProjectPage from "./page/ProjectPage";
+import ProjectPage from "./page/ProjectPage";
+
+const isAuthenticated = () => {
+  // Kiểm tra nếu có token trong localStorage
+  return localStorage.getItem("token") !== null;
+};
+
+const PrivateRoute = ({ element }: { element: React.ReactNode }) => {
+  return isAuthenticated() ? <>{element}</> : <Navigate to="/login" />;
+};
+
 const router = createBrowserRouter([
   {
     path: "/login",
-    element: <Login />,
+    element: isAuthenticated() ? <Navigate to="/task" /> : <Login />,
   },
   {
     path: "/task",
-    element: <TaskPage />,
+    element: <PrivateRoute element={<TaskPage />} />,
   },
   {
     path: "/project",
-    // element: <ProjectPage />,
+    element: <PrivateRoute element={<ProjectPage />} />,
   },
   {
     path: "/*",

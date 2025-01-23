@@ -6,9 +6,11 @@ import {
   Delete,
   Body,
   Param,
+  Query,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { Task } from './task.schema';
+import { Query as ExpressQuery } from 'express-serve-static-core';
 
 @Controller('task')
 export class TaskController {
@@ -19,9 +21,29 @@ export class TaskController {
     return this.taskService.createTask(task);
   }
 
+  @Get('all')
+  async getTasksAll() {
+    return this.taskService.findTaskAll();
+  }
+
   @Get(':userId')
-  async getTasksByUserId(@Param('userId') userId: string) {
-    return this.taskService.findTasksByUserId(userId);
+  async getTasksByUserId(
+    @Param('userId') userId: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 3,
+    @Query() query: ExpressQuery,
+    @Query('status') status: string,
+    @Query('priority') priority: string,
+  ) {
+    console.log(page, limit, 'line 36');
+    return this.taskService.findTasksByUserId(
+      userId,
+      page,
+      limit,
+      query,
+      status,
+      priority,
+    );
   }
 
   @Put(':_id')

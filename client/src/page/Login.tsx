@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { Radio } from "antd";
 import { useDispatch } from "react-redux";
 import { loginRequest, signUpRequest } from "../store/login/userSlice";
-import SignInForm from"../components/SignInForm";
-import SignUpForm from "../components/SignUpForm";
+import SignInForm from "../container/SignInForm";
+import SignUpForm from "../container/SignUpForm";
 import { AppDispatch } from "../store/configureStore";
 import { Login, Register } from "@/container/type";
 import Toast from "../components/Toast";
-
+import img from "../assets/image/imgLogin.png"
 const LoginPage: React.FC = () => {
   const [position, setPosition] = useState<"Sign In" | "Sign Up">("Sign In");
   const navigate = useNavigate();
@@ -48,7 +48,7 @@ const LoginPage: React.FC = () => {
       ).unwrap();
       showToast("Login successful! Redirecting...", "success");
       setTimeout(() => {
-        navigate("/home");
+        navigate("/task");
       }, 5000);
     } catch (error) {
       showToast("Login failed. Please try again.", "error");
@@ -59,7 +59,16 @@ const LoginPage: React.FC = () => {
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white w-[1100px] h-[566px] flex rounded-lg shadow-lg">
         {/* Left */}
-        <div className="hidden lg:block w-1/2 rounded-tl-lg rounded-bl-lg shadow-lg background-image">
+        <div
+          className="hidden lg:block w-1/2 rounded-tl-lg rounded-bl-lg shadow-lg text-center bg-cover bg-center h-auto"
+          style={{
+            backgroundImage: `url(${img})`,
+            textAlign: "center",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            height: "auto",
+          }}
+        >
           <div className="content flex items-center justify-center h-full">
             <div className="text-center text-white">
               <h2 className="text-4xl font-semibold mb-4 text-white">

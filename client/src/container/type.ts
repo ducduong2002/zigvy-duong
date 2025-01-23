@@ -18,10 +18,6 @@ export  interface User {
   _id: string
 }
 
-export interface UserId extends Omit<User, "email" | "password" | "_id"> {
-  userId: string;
-}
-
 export interface ApiResponse {
   user: {
     _id: string;
@@ -31,20 +27,27 @@ export interface ApiResponse {
   token: string;
 }
 
-export interface Task  {
+export interface Tasks  {
   userId: string;
   task: string;
-  priority: "High" | "Medium" | "Low";
-  status: "Pending" | "In Progress" | "Completed";
+  priority: string
+  status: string
   date: string;
   _id?: string;
 }
 
-export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
+export interface Projects {
+  userId: string;
+  project: string;
+  name: string
+  owner: string
+  date: string;
+  _id?: string;
+}
+
+export interface columnTask {
+  title: string;
   dataIndex: string;
-  title: any;
-  inputType: "number" | "text";
-  record: Task;
-  index: number;
+  editable: boolean;
+  render: (text: string) => JSX.Element;
 }
