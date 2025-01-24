@@ -1,15 +1,17 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import Login from "./page/Login";
 import {
   createBrowserRouter,
   RouterProvider,
   Navigate,
 } from "react-router-dom";
-import TaskPage from "./page/TaskPage";
-import ProjectPage from "./page/ProjectPage";
+import ErrorPage from "./status/error-page";
+import SkeletonLoader from "./status/loading-skeleton"; 
+
+const TaskPage = lazy(() => import("./page/TaskPage"));
+const ProjectPage = lazy(() => import("./page/ProjectPage"));
 
 const isAuthenticated = () => {
-  // Kiểm tra nếu có token trong localStorage
   return localStorage.getItem("token") !== null;
 };
 
@@ -21,14 +23,25 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: isAuthenticated() ? <Navigate to="/task" /> : <Login />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/task",
-    element: <PrivateRoute element={<TaskPage />} />,
+    element: (
+      <Suspense fallback={<SkeletonLoader />}>
+        <PrivateRoute element={<TaskPage />} />
+      </Suspense>
+    ),
+    errorElement: <ErrorPage />,
   },
   {
     path: "/project",
-    element: <PrivateRoute element={<ProjectPage />} />,
+    element: (
+      <Suspense fallback={<SkeletonLoader />}>
+        <PrivateRoute element={<ProjectPage />} />
+      </Suspense>
+    ),
+    errorElement: <ErrorPage />,
   },
   {
     path: "/*",

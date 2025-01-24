@@ -12,15 +12,17 @@ interface TaskState {
   totalPages: number;
   keyword: string;
   status: string;
-  priority: string;
+  priority: string; 
+  error: string | null;
 }
 
 const initialState: TaskState = {
   tasks: [],
   filteredTasks: [],
   loading: false,
+  error: null,
   page: 1,
-  limit: 5,
+  limit: 3,
   totalTasks: 0,
   totalPages: 0,
   keyword: "",
@@ -46,7 +48,7 @@ export const fetchTaskByUserId = createAsyncThunk(
     );
     console.log(response.data);
     return response.data;
-  }
+  } 
 );
 
 
@@ -119,13 +121,14 @@ const taskSlice = createSlice({
           action.payload;
         state.tasks = tasks;
         state.limit = limit;
-        state.page = page;
+        state.page = page;  
         state.totalTasks = totalTasks;
         state.totalPages = totalPages;
         state.loading = false;
       })
-      .addCase(fetchTaskByUserId.rejected, (state) => {
+      .addCase(fetchTaskByUserId.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.error.message || 'Something went wrong';
       })
       .addCase(addTask.fulfilled, (state, action) => {
         state.tasks.push(action.payload);

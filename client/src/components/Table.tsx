@@ -10,6 +10,7 @@ interface AntDTableProps {
   current: number;
   limit: number;
   total: number;
+  loading: boolean;
   handlePaginationChange: (newPage: number, newLimit: number) => void;
 }
 
@@ -21,6 +22,7 @@ const AntDTable: React.FC<AntDTableProps> = ({
   page,
   limit,
   total,
+  loading,
   handlePaginationChange,
 }) => {
   return (
@@ -47,6 +49,7 @@ const AntDTable: React.FC<AntDTableProps> = ({
               </div>
             ),
           }}
+          loading={loading}
         />
       </Form>
     </div>

@@ -49,7 +49,7 @@ const LoginPage: React.FC = () => {
       showToast("Login successful! Redirecting...", "success");
       setTimeout(() => {
         navigate("/task");
-      }, 5000);
+      }, 2000);
     } catch (error) {
       showToast("Login failed. Please try again.", "error");
     }

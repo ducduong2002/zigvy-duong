@@ -35,7 +35,8 @@ export class TaskController {
     @Query('status') status: string,
     @Query('priority') priority: string,
   ) {
-    console.log(page, limit, 'line 36');
+    console.log('Query params:', { page, limit, status, priority });
+
     return this.taskService.findTasksByUserId(
       userId,
       page,

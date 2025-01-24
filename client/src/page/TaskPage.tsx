@@ -11,15 +11,15 @@ import {
   setKeyword,
   resetTasks,
   setFilterStatus,
-  setPriority,
   setFilterPriority,
 } from "../store/task/taskSlice";
 import { AppDispatch } from "../store/configureStore";
 import AntDTable from "../components/Table";
 import Header from "../components/Header";
 import InputSearch from "../components/InputSearch";
+import AntDOption from "@/components/Option";
 import { format } from "date-fns";
-import { Form, Input, Select, Popconfirm, Typography, Skeleton } from "antd";
+import { Form, Input, Select, Popconfirm, Typography } from "antd";
 import { DeleteOutlined, FormOutlined } from "@ant-design/icons";
 import { Tasks } from "../container/type";
 import ModelTask from "../components/ModelTask";
@@ -89,11 +89,12 @@ const TaskPage = () => {
     page,
     limit,
     totalTasks,
-    totalPages,
     keyword,
     priority,
+    loading,
   } = useSelector((state: RootState) => state.tasks);
-
+  const statusOptions = ["Pending", "Completed", "In Progress"];
+  const priorityOptions = ["Low", "Medium", "High"];
   useEffect(() => {
     dispatch(fetchUserProfileRequest());
   }, [dispatch]);
@@ -243,13 +244,11 @@ const TaskPage = () => {
 
   const handleSearch = (value: string) => {
     dispatch(setKeyword(value));
-    dispatch(setPage(1));
   };
 
   const resetData = () => {
     dispatch(resetTasks());
     dispatch(setKeyword(""));
-    dispatch(setPage(1));
   };
 
   const handleStatusChange = (value: string) => {
@@ -289,42 +288,18 @@ const TaskPage = () => {
             />
 
             <div className="flex">
-              <div>
-                <Select
-                  value={status}
-                  placeholder="filter Status"
-                  onChange={handleStatusChange}
-                  style={{
-                    width: 120,
-                    marginBottom: 5,
-                    marginRight: 16,
-                    marginTop: 5,
-                  }}
-                  allowClear
-                >
-                  <Option value="Pending">Pending</Option>
-                  <Option value="Completed">Completed</Option>
-                  <Option value="In Progress">In Progress</Option>
-                </Select>
-              </div>
-              <div>
-                <Select
-                  value={priority}
-                  placeholder="filter priority"
-                  onChange={handlePriorityChange}
-                  style={{
-                    width: 120,
-                    marginBottom: 5,
-                    marginRight: 16,
-                    marginTop: 5,
-                  }}
-                  allowClear
-                >
-                  <Option value="Low">Low</Option>
-                  <Option value="Medium">Medium</Option>
-                  <Option value="High">High</Option>
-                </Select>
-              </div>
+              <AntDOption
+                options={statusOptions}
+                placeholder="Filter Status"
+                value={status}
+                onChange={handleStatusChange}
+              />
+              <AntDOption
+                options={priorityOptions}
+                placeholder="Filter Priority"
+                value={priority}
+                onChange={handlePriorityChange}
+              />
             </div>
           </div>
 
@@ -343,6 +318,7 @@ const TaskPage = () => {
                 limit={limit}
                 total={totalTasks}
                 handlePaginationChange={handlePaginationChange}
+                loading={loading}
               />
             )}
           </div>
